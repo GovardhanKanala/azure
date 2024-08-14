@@ -7,8 +7,9 @@ This query checks the CPU usage on AKS nodes.
 KubeNodeInventory
 | where TimeGenerated > ago(5m)
 | where ClusterName == "your-cluster-name"
-| summarize AvgCpuUsage=avg(CpuUsageNanoCores) by Computer
-| where AvgCpuUsage > 800000000 // Example threshold: 800m CPU
+| summarize AllocatedCpu=avg(CpuAllocatedNanoCores), AllocatableCpu=avg(CpuAllocatableNanoCores) by Computer
+| extend CpuUsagePercentage = (AllocatedCpu / AllocatableCpu) * 100
+| where CpuUsagePercentage > 80 // Alert when CPU usage exceeds 80%
 ```
 
 ```
