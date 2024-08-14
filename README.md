@@ -11,3 +11,10 @@ KubeNodeInventory
 | where AvgCpuUsage > 800000000 // Example threshold: 800m CPU
 ```
 
+```
+KubePodInventory
+| where TimeGenerated > ago(5m)
+| where ClusterName == "your-cluster-name"
+| summarize AvgMemoryUsage=avg(MemoryUsageBytes) by Name, Namespace
+| where AvgMemoryUsage > 2000000000 // Example threshold: 2 GB
+```
